@@ -1,47 +1,3 @@
-;;
-;; in project.clj
-;;
-;; [enlive "1.1.5"]
-;;
-
-;;
-;; 1. <clojure> tag
-;;    Example:
-;;      <clojure>
-;;        (html [:h1 "Hello, world!"])
-;;      </clojure>
-;;
-;; 2. render(partial) in <clojure> tag
-;;    Example:
-;;      <clojure>
-;;        (views :partial "test.html")
-;;      </clojure>
-;;
-;; 3. render macro
-;;    Example:
-;;      (def test
-;;        (render [req]
-;;           (views :render "test.html")
-;;           [:#content] (prepend (html [:div.ip (req :remote-addr)]))
-;;           [:div.info] (append  (html [:div.params (req :params)]))))
-;;      in handler
-;;      (GET "/" req (test req))
-;;
-;; 4. set mode to load cljhtml
-;;    [:production]  => use template-cache
-;;    [:development] => read cljhtml every time
-;;    Default:
-;;      :development
-;;    Example:
-;;      (cljhtml-mode :production)
-;;
-;; 6. set root directory (in "src") to cljhtml
-;;    Default:
-;;      nil
-;;    Example:
-;;      (cljhtml-root "application/templates")
-;;
-
 (ns enlive.cljhtml
   (:gen-class)
   (:require net.cgrand.enlive-html))
@@ -166,7 +122,7 @@
     {:render  (cljhtml-map html-resource paths)
      :partial (cljhtml-map html-partial  paths)}))
 
-(defn- cljhtml-cache []
+(defn cljhtml-cache []
   (let [nskey (ns-keyword)]
     (ref-set! template-cache
               (assoc @template-cache nskey

@@ -2,105 +2,165 @@ enlive-cljhtml
 ========
 Template engin for Clojure that uses [enlive] 
 
-Installation
------
-Add following dependency to your __project.clj__    
 
-    [enlive-cljhtml "0.0.1"]
+Installation
+----
+Add following dependency to your `project.clj`
+
+    [enlive-cljhtml "0.0.2"]
+
 
 Usage
 ----
-1. Require
+### Require
 
-        (require [enlive.cljhtml :as template])
+```clj
+(require '[enlive.cljhtml :as template])
+```
 
-2. Set root directory for template in src (default: nil)
 
-        (template/cljhtml-root "template") ;; -> "src/template"
 
-3. Set mode (default: :development)   
 
-    __:production__ (use template-cache)
+### Root Directory
 
-        (template/cljhtml-mode :production)
+Set root directory for template in src (default: `nil`)
 
-    __:development__ (read templates every time)
+```clj
+(template/cljhtml-root "template") ;; -> "src/template"
+```
 
-         (template/cljhtml-mode :development)
 
-4. Parsed views
 
-    "src/template/test.html"
 
-        <div>abcdefg</div>
+### Mode
 
-    __:partial__ (append tag. html,head,body,etc...)
+Set mode (default: `:development`)
 
-        (template/views :partial "test.html")
-        ;; -> parse "<div>abcdefg</div>"
+__:production__ (use template-cache)
 
-    __:render__ (append tag. html,head,body,etc...)
+```clj
+(template/cljhtml-mode :production)
+```
 
-        (template/views :render "test.html")
-        ;; -> parse "<html><head></head><body><div>abcdefg</div></body></html>"
+__:development__ (read templates every time)
 
-5. Embed __&lt;clojure&gt;__ tag
+```clj
+(template/cljhtml-mode :development)
+```
 
-    "src/template/app.html"
 
-        <html>
-            <head></head>
-            <body>
-                <clojure>(template/html [:h1 "Title"])</clojure>
-                <clojure>(template/views :partial "test.html")</clojure>
-            </body>
-        </html>
 
-6. Render macro
 
-    __defrender__ macro
+### Views
 
-        (defrender test [data]
-            ;; base template
-            (views :render "app.html")
-            ;; selector & command
-            [:h1] (template/prepend "Enlive")
-            [:div] (template/append "hijklmn") 
-            [:div] (template/append
-                       (template/html [:span (:content data)]))))
+HTML `src/template/test.html`
 
-    __render__ macro
+```html
+<div>abcdefg</div>
+```
 
-        (def test
-            (template/render [data]
-                ;; base template
-                (views :render "app.html")
-                ;; selector & command
-                [:h1] (template/prepend "Enlive")
-                [:div] (template/append "hijklmn") 
-                [:div] (template/append
-                           (template/html [:span (:content data)]))))
-   use
+__:partial__
 
-        (test {:content "opqrstu"})
+```clj
+(template/views :partial "test.html")
+;; -> parse "<div>abcdefg</div>"
+```
 
-    output
+__:render__ (append tag. html,head,body,etc...)
 
-        <html>
-            <head></head>
-            <body>
-                <h1>EnliveTitle</h1>
-                <div>
-                    abcdefghijklmn
-                    <span>opqrstu</span>
-                </div>
-            </body>
-        </html>
+```clj
+(template/views :render "test.html")
+;; -> parse "<html><head></head><body><div>abcdefg</div></body></html>"
+```
+
+
+
+
+### &lt;clojure&gt; Tag
+
+HTML `src/template/app.html`
+
+```html
+<html>
+    <head></head>
+    <body>
+        <clojure>(template/html [:h1 "Title"])</clojure>
+        <clojure>(template/views :partial "test.html")</clojure>
+    </body>
+</html>
+```
+
+
+
+
+### Render
+
+__defrender__ macro
+
+```clj
+(defrender test [data]
+    ;; base template
+    (template/views :render "app.html")
+    ;; selector & command
+    [:h1] (template/prepend "Enlive")
+    [:div] (template/append "hijklmn") 
+    [:div] (template/append
+               (template/html [:span (:content data)]))))
+```
+
+__render__ macro
+
+```clj
+(def test
+    (template/render [data]
+        ;; base template
+        (template/views :render "app.html")
+        ;; selector & command
+        [:h1] (template/prepend "Enlive")
+        [:div] (template/append "hijklmn") 
+        [:div] (template/append
+                   (template/html [:span (:content data)]))))
+```
+
+use
+
+
+```clj
+(test {:content "opqrstu"})
+```
+
+output
+
+```html
+<html>
+    <head></head>
+    <body>
+        <h1>EnliveTitle</h1>
+        <div>
+            abcdefghijklmn
+            <span>opqrstu</span>
+        </div>
+    </body>
+</html>
+```
+
+
+
+
+### Reload Cache
+
+When template file is added
+
+```clj
+(template/cljhtml-cache)
+```
+
 
 
 
 License
------
+----
 Copyright © 2014 Daigo Kawasaki (@emanon_was)
 
 Distributed under the Eclipse Public License either version 1.0 or (at your option) any later version.
+
