@@ -28,32 +28,18 @@
 ;;      (GET "/" req (test req))
 ;;
 ;; 4. set mode to load cljhtml
-;;    [:production]  => use *cljhtml-cache*
+;;    [:production]  => use template-cache
 ;;    [:development] => read cljhtml every time
 ;;    Default:
 ;;      :development
 ;;    Example:
 ;;      (cljhtml-mode :production)
 ;;
-;; 5. set ns to run cljhtml
-;;    Default:
-;;      'enlive.cljhtml
-;;    Example:
-;;      (cljhtml-ns 'application.controller)
-;;
 ;; 6. set root directory (in "src") to cljhtml
 ;;    Default:
 ;;      nil
 ;;    Example:
 ;;      (cljhtml-root "application/templates")
-;;
-;; 7. set use-ns in ns to run cljhtml
-;;    Example:
-;;      (cljhtml-use 'application.helper)
-;;
-;; 8. set require-ns in ns to run cljhtml
-;;    Example:
-;;      (cljhtml-require 'application.helper)
 ;;
 
 (ns enlive.cljhtml
